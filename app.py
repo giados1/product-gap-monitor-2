@@ -11,10 +11,10 @@ import pandas as pd
 import streamlit as st
 import yaml
 
-from product_gap import analytics, db
-from product_gap.adapters import amazon, google_trends, meta, tiktok
-from product_gap.keywords import suggerisci_keyword
-from product_gap.scoring import load_config, score_snapshot
+import analytics, db
+import amazon, google_trends, meta, tiktok
+from keywords import suggerisci_keyword
+from scoring import load_config, score_snapshot
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(BASE_DIR, "config.yaml")
@@ -270,15 +270,12 @@ def pagina_dettaglio():
 
 
 def main():
-    # Auto-seed per il cloud: su Streamlit Community Cloud il filesystem è volatile,
-    # quindi se il DB è vuoto ricarichiamo i prodotti esempio all'avvio.
     try:
         if not db.list_products(conn()):
-            from product_gap import seed_example
-
+            import seed_example
             seed_example.esegui()
             st.sidebar.info("🟢 DB vuoto: ricaricati i 3 prodotti esempio.")
-    except Exception as e:  # non bloccare mai l'avvio per l'auto-seed
+    except Exception as e:
         st.sidebar.warning(f"Auto-seed non riuscito: {e}")
 
     st.sidebar.title("🇮🇹 Product Gap Monitor")
