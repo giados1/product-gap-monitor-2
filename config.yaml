@@ -1,0 +1,28 @@
+# Product Gap Monitor Italia - configurazione regole
+# Modifica le soglie qui: l'app le rilegge a ogni avvio.
+regole:
+  google_trends:
+    attiva: true
+    rapporto_volume_min: 5.0        # volume Globale / Italia tra 5 e 10 = "sei in tempo"
+    rapporto_volume_max: 10.0
+    richiedi_trend_it_in_salita: true   # la curva Italia deve essere in salita
+  tiktok_italia:
+    attiva: true
+    # Segnale di supporto: presenza nei Top Products TikTok Italia = domanda locale confermata
+  meta_ads_italia:
+    attiva: true
+    max_inserzionisti_attivi_it: 0   # 0 = nessuno spende in ads in Italia => gap reale
+  amazon_it:
+    attiva: true
+    max_venditori_oltre_1000_recensioni: 6  # meno di 5-6 venditori forti => non presidiato
+
+verdetto:
+  # Regole necessarie per un GAP APERTO (tutte "ok" insieme)
+  regole_necessarie: [google_trends, meta_ads_italia, amazon_it]
+
+scoring:
+  # Pesi del punteggio di sintesi 0-100 (ranking dashboard e storico)
+  peso_google_trends: 35
+  peso_tiktok_italia: 10
+  peso_meta_ads_italia: 30
+  peso_amazon_it: 25
